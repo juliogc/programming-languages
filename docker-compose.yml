@@ -1,0 +1,43 @@
+version: '3.5'
+
+services:
+  # Database
+  mongodb:
+    container_name: 'mongodb'
+    image: 'mongo:latest'
+    ports:
+      - '27017:27017'
+  # RabbitMQ AMQP Server
+  rabbitmq:
+    container_name: 'rabbitmq'
+    image: 'rabbitmq:3-management'
+    ports:
+      - '8080:15672'
+      - '5672:5672'
+  # event-consumer
+  event-consumer:
+    build: ./event-consumer/.
+    container_name: 'event-consumer'
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "npm", "start"]
+    environment:
+      - QUEUE_SERVER=rabbitmq
+      - MONGO_SERVER=mongodb
+    links:
+      - 'mongodb:mongo'
+      - 'rabbitmq:rabbit'
+    depends_on:
+      - 'mongodb'
+      - 'rabbitmq'
+  # event-viewer
+  event-viewer:
+    build: ./event-viewer/.
+    container_name: 'event-viewer'
+    command: ["npm", "start"]
+    ports:
+      - '3000:3000'
+    environment:
+      - MONGO_SERVER=mongodb
+    links:
+      - 'mongodb:mongo'
+    depends_on:
+      - 'mongodb'

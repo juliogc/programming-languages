@@ -1,0 +1,20 @@
+{
+  "name": "event-consumer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "keywords": [],
+  "author": "Julio Corradi <jcorradi@uolinc.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "dotenv": "^6.0.0",
+    "mongoose": "^5.2.10"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
